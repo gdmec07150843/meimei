@@ -1,0 +1,77 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>添加热门搜索</h5>
+                        <a href="{:url('/admin/goodsearch/index')}" class="btn btn-default btn-sm" style="float: right;">返回药品分类列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">热门搜索: <span class="form-required">*</span></label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input name="s_name" type="text" class="form-control s_name" value="" placeholder="请输入热门搜索" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm addgoodsearch" type="button">添加</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    $(document).ready(function(){
+        /* 添加热门搜索 */
+        $('.addgoodsearch').click(function(){
+            /* 热门搜索 */
+            var s_name = $('.s_name').val();
+            if(s_name==''){
+                swal({
+                    title: "热门搜索不能为空",
+                    type:'error'
+                });
+                return false;
+            }else{
+                $.post('/admin/goodsearch/addPost',{s_name:s_name},function(res){
+                    if(res.code==1){
+                        swal({
+                            title: "添加成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/goodsearch/index";
+                        },2000);
+                    }else{
+                        swal({
+                            title: "添加失败",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{/block}

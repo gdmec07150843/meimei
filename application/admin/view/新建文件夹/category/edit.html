@@ -1,0 +1,105 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>修改药品分类</h5>
+                        <a href="{:url('/admin/category/index')}" class="btn btn-default btn-sm" style="float: right;">返回药品分类列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <input type="hidden" name="id" class="cate_id" value="{$list.id}">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">药品分类名称: <span class="form-required">*</span></label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input name="c_name" type="text" class="form-control c_name" value="{$list.c_name}" placeholder="请输入药品分类名称" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">分类背景图: <span class="form-required">*</span></label>
+                                <input type="hidden" name="c_pic" class="c_pic" id="thumbnail" value="{$list.c_pic|default=''}" />
+                                <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                                    {if condition="$list.c_pic eq null"}
+                                    <img src="/static/img/default-thumbnail.png" id="thumbnail-preview" width="100" height="100" style="cursor: pointer" />
+                                    {else/}
+                                    <img src="{:getPreviewUrl($list.c_pic)}" id="thumbnail-preview" width="100" height="100" style="cursor: pointer" />
+                                    {/if}
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm editcategory" type="button">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    $(function () {
+        $('.btn-cancel-thumbnail').click(function () {
+                $('#thumbnail-preview').attr('src', '/static/img/default-thumbnail.png');
+                $('#thumbnail').val('');
+        });
+    });
+    $(document).ready(function(){
+        /* 修改药品分类 */
+        $('.editcategory').click(function(){
+            /* 药品分类id */
+            var id = $('.cate_id').val();
+            /* 药品分类名称 */
+            var c_name = $('.c_name').val();
+            /* 商品分类图 */
+            var c_pic = $('.c_pic').val();
+            if(c_name==''){
+                swal({
+                    title: "药品分类名称不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(c_pic==''){
+                swal({
+                    title: "商品分类图不能为空",
+                    type:'error'
+                });
+                return false;
+            }else{
+                $.post('/admin/category/editPost',{id:id,c_name:c_name,c_pic:c_pic},function(res){
+                    if(res.code==1){
+                        swal({
+                            title: "修改成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/category/index";
+                        },2000);
+                    }else{
+                        swal({
+                            title: "修改失败",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{/block}

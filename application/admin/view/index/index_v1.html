@@ -1,0 +1,78 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css" />
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>今日订单总数</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{$list.o_number}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>今日销售总额</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span>￥</span>{$list.o_total}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>昨日销售总额</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span>￥</span>{$list.o_ytotal}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>近7日销售总额</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins"><span>￥</span>{$list.o_wtotal}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pending">
+            <div class="col-sm-12 outer_frame">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>待处理事务</h3>
+                    </div>
+                    <div class="ibox-content" style="margin-bottom: 52px;">
+                        <div class="col-sm-5 o_right">
+                            <h3>待付款订单<span class="o_number">({$list.o_pendnumnber})</span></h3>
+                            <div class="o_link"></div>
+                        </div>
+                        <div class="col-sm-5">
+                            <h3>已完成订单<span class="o_number">({$list.o_completnumnber})</span></h3>
+                            <div class="o_link"></div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="col-sm-5 o_right">
+                            <h3>待发货订单<span class="o_number">({$list.o_delivernumnber})</span></h3>
+                            <div class="o_link"></div>
+                        </div>
+                        <div class="col-sm-5">
+                            <h3>已发货订单<span class="o_number">({$list.o_shippnumnber})</span></h3>
+                            <div class="o_link"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

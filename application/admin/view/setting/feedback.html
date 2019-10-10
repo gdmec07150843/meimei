@@ -1,0 +1,77 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<link href="/admin/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+<style type="text/css">
+    .table-responsive th, .table-responsive td{
+        text-align: center;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>建议反馈</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+	                                <tr>
+	                                	<th width="5%">序号</th>
+	                                    <th>账户手机号</th>
+                                        <th>图片</th>
+                                        <th>内容</th>
+                                        <th>提交时间</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+                                    {if condition="$list neq null"}
+                                        {volist name="list" id="vo"}
+    									<tr>
+                                            <td>{$i}</td> 
+                                            <td>{$vo.phone}</td>
+                                            <td>
+                                                {if condition="$vo['pic'] neq null"}
+                                                    {volist name="$vo['pic']" id="co"}
+                                                         <a href="{$co}" title="图片" data-gallery=""><img src="{$co}" alt="" style="width:50px;height:50px;"></a>
+                                                    {/volist}
+                                                {/if}
+                                            </td>
+                                            <td>{$vo.content}</td>
+                                            <td>{:date('Y-m-d H:i:s',$vo.addtime)}</td>                          
+                                        </tr>
+                                        {/volist}
+                                    {/if}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+	    <div class="slides"></div>
+	    <h3 class="title"></h3>
+	    <a class="prev">‹</a>
+	    <a class="next">›</a>
+	    <a class="close">×</a>
+	    <a class="play-pause"></a>
+	    <ol class="indicator"></ol>
+	</div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<!-- blueimp gallery -->
+<script src="/admin/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+{/block}

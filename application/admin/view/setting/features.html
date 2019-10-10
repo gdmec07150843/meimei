@@ -1,0 +1,171 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">     
+                <div class="ibox-content col-sm-6">
+                    <table class="table table-bordered table-striped">
+                          <colgroup>
+                            <col class="col-xs-7">
+                            <col class="col-xs-5">
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th>分项</th>
+                              <th>操作</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                                <tr>
+                                  <th scope="row">{$countdown.title}</th>
+                                  <td><input type="checkbox" class="js-switch countdown" id="{$countdown.id}" u_name="{$countdown.status}" {$countdown.status==1?'checked':""}/></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">{$shield.title}</th>
+                                  <td><input type="checkbox" class="js-switch shield" id="{$shield.id}" u_name="{$shield.status}" {$shield.status==1?'checked':""}/></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">{$lbnum.title}</th>
+                                  <td><input type="checkbox" class="js-switch lbnum" id="{$lbnum.id}" u_name="{$lbnum.status}" {$lbnum.status==1?'checked':""}/></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">{$lbdetail.title}</th>
+                                  <td><input type="checkbox" class="js-switch lbdetail" id="{$lbdetail.id}" u_name="{$lbdetail.status}" {$lbdetail.status==1?'checked':""}/></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">{$priority.title}</th>
+                                  <td><input type="checkbox" class="js-switch priority" id="{$priority.id}" u_name="{$priority.status}" {$priority.status==1?'checked':""}/></td>
+                                </tr>
+                                 <tr>
+                                  <th scope="row">{$vipnum.title}</th>
+                                  <td>{$vipnum.num} &nbsp;&nbsp;&nbsp;<a class="btn btn-primary btn-sm edituserphone">修改</a></td>
+                                </tr>
+                          </tbody>
+                    </table>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    /*switchery多个按钮 */
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+    elems.forEach(function(html) {
+        var switchery = new Switchery(html);
+    });
+
+    $("td,th").addClass("text-center");
+
+    /* 修改当前永久VIP人数 */
+    $('.edituserphone').click(function(){
+        var id = $(this).attr('uid');
+        console.log(id);
+        openIframeLayer("{:url('/admin/setting/open')}", '当前永久VIP人数', {
+            area: ['1000px', '400px'],
+            yes: function (index, layero) {
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+            }
+        });
+    });
+
+
+    /* 礼金直约、同城约玩倒计时 */
+    $(document).on('change','.countdown',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')){
+            case '1':
+                $.post('/admin/setting/edituserstatus',{id:id,status:2},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/setting/edituserstatus',{id:id,status:1},function(res){
+
+                });
+                break;
+        }
+    });
+
+    /* 定位屏蔽功能 */
+    $(document).on('change','.shield',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/setting/edituserstatus',{id:id,status:2},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/setting/edituserstatus',{id:id,status:1},function(res){
+
+                });
+                break;
+        }
+    });
+
+    /* 排行榜显示数量 */
+    $(document).on('change','.lbnum',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/setting/edituserstatus',{id:id,status:2},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/setting/edituserstatus',{id:id,status:1},function(res){
+
+                });
+                break;
+        }
+    });
+
+    /* 排行榜查看头像详情 */
+    $(document).on('change','.lbdetail',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/setting/edituserstatus',{id:id,status:2},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/setting/edituserstatus',{id:id,status:1},function(res){
+
+                });
+                break;
+        }
+    });
+
+    /* 寻聊优先功能 */
+    $(document).on('change','.priority',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/setting/edituserstatus',{id:id,status:2},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/setting/edituserstatus',{id:id,status:1},function(res){
+
+                });
+                break;
+        }
+    });
+</script>
+{/block}

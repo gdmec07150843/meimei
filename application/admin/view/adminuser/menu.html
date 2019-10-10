@@ -1,0 +1,72 @@
+{extend name="header:header"/}
+{block name="content"}
+<style type="text/css">
+    .checkbox-inline input[type=checkbox]{
+        margin-top:0px !important;
+    }
+</style>
+    <body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>权限列表</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <input type="hidden" value="{$admin_id}" class="adminid" />
+                        <form class="form-horizontal m-t menu">
+                            {if condition="$list neq null"}
+                                {volist name="list" id="vo"}
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-md-6 col-sm-10">
+                                        <label class="checkbox-inline"><input type="checkbox" name="access" class="access" value="{$vo.id}" {$vo.menu_id==$vo.id?'checked':''}>{$vo.name}</label>
+                                        {volist name="vo.info" id="v"}
+                                          <label class="checkbox-inline"><input type="checkbox" name="access" class="access" value="{$v.id}" {$v.menu_id==$v.id?'checked':''}>{$v.name}</label>
+                                        {/volist}
+                                    </div>
+                                </div>
+                                {/volist}
+                            {else/}
+                                <div class="form-group">暂时没有数据</div>
+                            {/if}
+                            <div class="form-group">
+                                <div class="col-sm-6 col-sm-offset-5">
+                                    <a class="btn btn-primary addmenu" type="botton">保存</a>
+                                    <a class="btn btn-default" href="{:url('/admin/adminuser/index')}">返回管理员列表</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="/admin/js/admin.js"></script>
+<script type="text/javascript">
+    $('.addmenu').click(function(){
+        var id_array=[];
+        var admin_id = $('.adminid').val();
+        $("input[type='checkbox']:checked").each(function(){
+            id_array.push($(this).val());
+        });
+        if(id_array.length==0){
+            swal({
+                title: "请选择菜单",
+                type: "error"
+            });
+            return false;
+        }else{
+            var menuids=id_array.join(',');
+            $.get('/admin/adminuser/addadminmenu',{admin_id:admin_id,menuids:menuids},function(res){
+              if(res.code=='0'){
+                setTimeout(function(){
+                  swal("修改成功！", "您已经修改了该数据", "success");
+                },500);
+              }
+            });
+        }
+    });
+</script>
+{/block}

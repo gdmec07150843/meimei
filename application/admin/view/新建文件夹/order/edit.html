@@ -1,0 +1,194 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>修改订单</h5>
+                        <a href="{:url('/admin/order/index')}" class="btn btn-default btn-sm" style="float: right;">返回订单列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <!-- 基本信息 -->
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>目前订单的状态：
+                                    <span style="color:red;">
+                                        {switch name="$list.order_status"}
+                                            {case value="1"}待付款{/case}
+                                            {case value="2"}已付款{/case}
+                                            {case value="3"}已发货{/case}
+                                            {case value="4"}已完成{/case}
+                                            {case value="5"}已关闭{/case}
+                                            {case value="6"}已取消{/case}
+                                        {/switch}
+                                    </span>
+                                </h5>
+                            </div>
+                            <div class="ibox-title">
+                                <h5>订单信息</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <form class="form-horizontal">
+                                    <input type="hidden" name="id" class="order_id" value="{$list.id}">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">订单编号: <span class="form-required">*</span></label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <input name="order_number" type="text" class="form-control order_number" value="{$list.order_number}" placeholder="请输入订单编号" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">订单状态:<span class="form-required">*</span></label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <select class="form-control order_status" name="order_status">
+                                                <option value="1" {$list['order_status']==1?'selected':''}>待付款</option>
+                                                <option value="2" {$list['order_status']==2?'selected':''}>已付款</option>
+                                                <option value="3" {$list['order_status']==3?'selected':''}>已发货</option>
+                                                <option value="4" {$list['order_status']==4?'selected':''}>已完成</option>
+                                                <option value="5" {$list['order_status']==5?'selected':''}>已关闭</option>
+                                                <option value="6" {$list['order_status']==6?'selected':''}>已取消</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">支付方式:<span class="form-required">*</span></label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <select class="form-control pay_type" name="pay_type">
+                                                <option value="3">请选择支付方式</option>
+                                                <option value="1" {$list['pay_type']==1?'selected':''}>微信</option>
+                                                <option value="2" {$list['pay_type']==2?'selected':''}>支付宝</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">配送员:<span class="form-required">*</span></label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <select class="form-control did" name="did">
+                                                {if condition="$delivery neq null"}
+                                                    <option value="">请选择配送员</option>
+                                                    {volist name="delivery" id="vo"}
+                                                        <option value="{$vo.id}" {$list['did']==$vo['id']?'selected':''}>{$vo.d_name}</option>
+                                                    {/volist}
+                                                {else/}
+                                                    <option value="">暂无数据</option>
+                                                {/if}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">订单金额: <span class="form-required">*</span></label>
+                                        <div class="col-md-6 col-sm-10">
+                                            <input name="order_price" type="text" class="form-control order_price" value="{$list.order_price}" placeholder="请输入订单金额" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-3">
+                                            <button class="btn btn-primary btn-sm editorders" type="button">保存</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- 收货人信息 -->
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>收货地址</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>收货人</th>
+                                            <th>手机号码</th>
+                                            <th>收货地址</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{$list.name}</td>
+                                            <td>{$list.phone}</td>
+                                            <td>{$list.province_name}{$list.city_name}{$list.area_name}{$list.address}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- 商品信息 -->
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>商品信息</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品图片</th>
+                                            <th>商品名称</th>
+                                            <th>价格</th>
+                                            <th>药品类型</th>
+                                            <th>购买数量</th>
+                                            <th>小计</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {if condition="$list.goods neq null"}
+                                            {volist name="$list.goods" id="vo"}
+                                                <tr>
+                                                    <td><img src="{:getPreviewUrl($vo['g_pic']['photos'][0]['url'])}" onclick="imagePreviewDialog(this.src);" width="50" height="50" /></td>
+                                                    <td>{$vo.g_name}</td>
+                                                    <td>{$vo.g_price}</td>
+                                                    <td>{$vo.c_name}</td>
+                                                    <td>{$vo.goods_number}</td>
+                                                    <td>{$vo.price}</td>
+                                                </tr>
+                                            {/volist}
+                                        {else/}
+                                            <tr>
+                                                <td>暂无数据</td>
+                                            </tr>
+                                        {/if}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script type="text/javascript">
+    $('.editorders').click(function(){
+        var order_id = $('.order_id').val();
+        var order_status = $('.order_status').val();
+        var pay_type = $(".pay_type").find("option:selected").val();
+        var did = $(".did").find("option:selected").val();
+        $.post('/admin/order/editPost',{id:order_id,order_status:order_status,pay_type:pay_type,did:did},function(res){
+            if(res.code=1){
+                swal({
+                    title: "修改成功",
+                    type: "success"
+                });
+            }else{
+                swal({
+                    title: "修改失败",
+                    type: "error"
+                });
+            }
+        });
+    });
+</script>
+{/block}

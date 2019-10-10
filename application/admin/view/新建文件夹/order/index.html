@@ -1,0 +1,215 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<link href="/admin/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>订单列表</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="{:url('/admin/order/index')}" method="post" role="form" class="form-inline" style="padding-bottom:30px;">
+                            订单号: <input type="text" name="order_number" value="{$g_name|default=''}" autocomplete="off" placeholder="请输入订单号" style="width:200px;" class="form-control" />&nbsp;&nbsp;
+                            收货人: <input type="text" name="name" value="{$name|default=''}" autocomplete="off" placeholder="请输入收货人" style="width:200px;" class="form-control" />&nbsp;&nbsp;
+                            联系电话: <input type="text" name="phone" value="{$phone|default=''}" autocomplete="off" placeholder="请输入联系电话" style="width:200px;" class="form-control" />&nbsp;&nbsp;
+                            支付方式: <select class="form-control" name="pay_type">
+                            			<option value="">全部</option>
+			                            <option value="1" {$pay_type==1?'selected':''}>微信</option>
+			                            <option value="2" {$pay_type==2?'selected':''}>支付宝</option>
+			                            <option value="3" {$pay_type==3?'selected':''}>未付款</option>
+			                        </select>&nbsp;&nbsp;
+                            药品状态: <select class="form-control" name="order_status">
+			                            <option value="">全部</option>
+			                            <option value="1" {$order_status==1?'selected':''}>待付款</option>
+			                            <option value="2" {$order_status==2?'selected':''}>已付款</option>
+			                            <option value="3" {$order_status==3?'selected':''}>已发货</option>
+			                            <option value="4" {$order_status==4?'selected':''}>已完成</option>
+			                            <option value="5" {$order_status==5?'selected':''}>已关闭</option>
+			                        </select>&nbsp;&nbsp;
+                            <input type="submit" class="btn btn-success" value="搜索" style="margin-bottom: 0;"/>
+                            <a class="btn btn-success" href="">导出</a>
+                            <a class="btn btn-danger" href="">清空</a>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="f3">
+                                <thead>
+	                                <tr>
+	                                	<th></th>
+	                                    <th>序号</th>
+	                                    <th>订单编号</th>
+	                                    <th>提交时间</th>
+	                                    <th>用户账号</th>
+	                                    <th>收货人</th>
+	                                    <th>订单金额</th>
+	                                    <th>支付方式</th>
+	                                    <th>订单状态</th>
+	                                    <th>操作</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+                                    {if condition="$list neq null"}
+                                        {volist name="list" id="vo"}
+                                            <tr>
+                                                <td width="5"><input type="checkbox" name="o_id" class="o_id" id="{$vo['id']}" style="cursor: pointer;"></td>
+                                                <td>{$vo.id}</td>
+                                                <td>{$vo.order_number}</td>
+                                                <td>{:date('Y-m-d H:i',$vo['addtime'])}</td>
+                                                <td>{$vo.name}</td>
+                                                <td>{$vo.u_name}</td>
+                                                <td>{$vo.order_price}</td>
+                                                <td>
+                                                    {switch name="$vo.pay_type"}
+                                                        {case value="1"}微信{/case}
+                                                        {case value="2"}支付宝{/case}
+                                                        {case value="3"}{/case}
+                                                    {/switch}
+                                                </td>
+                                                <td>
+                                                    {switch name="$vo.order_status"}
+                                                        {case value="1"}待付款{/case}
+                                                        {case value="2"}已付款{/case}
+                                                        {case value="3"}已发货{/case}
+                                                        {case value="4"}已完成{/case}
+                                                        {case value="5"}已关闭{/case}
+                                                        {case value="6"}已取消{/case}
+                                                    {/switch}
+                                                </td>  
+                                                <td>
+                                                    <a href="{:url('/admin/order/edit',array('id'=>$vo['id']))}" class="btn btn-primary">编辑</a>
+                                                    <a onclick="deleteorder({$vo.id})" class="btn btn-danger">删除</a>
+                                                </td>                               
+                                            </tr>
+                                        {/volist}
+                                    {else/}
+                                        <tr>
+                                            <td style="font-size:14px;text-align:center;">暂无数据</td>
+                                        </tr>
+                                    {/if}
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-hover">
+                            	<tbody>
+                            		<tr>
+                            			<td colspan="7" style="text-align: left;cursor: pointer;">
+                                        	<input type="checkbox" name="g_id" class="selectall" style="cursor: pointer;"><span>全选</span>
+				                            <select class="form-control select_status" style="display: inherit;width:125px;">
+				                                <option value="3">设为已发货</option>
+				                                <option value="4">设为已完成</option>
+				                                <option value="5">设为已关闭</option>
+				                                <option value="6">设为已取消</option>
+                                                <option value="7">删除</option>
+				                            </select>&nbsp;&nbsp;
+                                            <select class="form-control did" style="display: inherit;width:150px;">
+                                                {if condition="$delivery neq null"}
+                                                    <option value="">请选择配送员</option>
+                                                    {volist name="delivery" id="vo"}
+                                                        <option value="{$vo.id}">{$vo.d_name}</option>
+                                                    {/volist}
+                                                {else/}
+                                                    <option value="">暂无配送员</option>
+                                                {/if}
+                                            </select>&nbsp;&nbsp;
+                                            <button onclick="onfirmall();" class="btn btn-primary" style="margin-bottom: 5px;">确认</button>
+                                        </td>
+                                        <td class="text-right pages">
+			                            	{$page}
+			                            </td>
+                                    </tr>
+                            	</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+	    <div class="slides"></div>
+	    <h3 class="title"></h3>
+	    <a class="prev">‹</a>
+	    <a class="next">›</a>
+	    <a class="close">×</a>
+	    <a class="play-pause"></a>
+	    <ol class="indicator"></ol>
+	</div>
+<!-- blueimp gallery -->
+<script src="/admin/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+<script>
+    /* 全选/全不选 */
+    $('.selectall').click(function(){
+        if(this.checked ==  true){
+            $('[name=o_id]').prop('checked', true);
+        }else{
+            $('[name=o_id]').prop('checked', false);
+        }
+    });
+
+    /* 多选-修改订单状态、删除订单 */
+    function onfirmall(){
+        var ids = [];
+        $("input[type='checkbox'][class='o_id']:checked").each(function(){
+            ids.push($(this).attr('id'));
+        });
+        var status = $(".select_status").val();
+
+        var did = $('.did').val();
+
+        /* 修改状态 */
+        if(status==3&&did==''){
+            swal({
+                title: "请选择配送员",
+                type:'error'
+            });
+            return false;
+        }else if(status<7){
+            $.post('/admin/order/checkStatus',{ids:ids,order_status:status,did:did},function(res){
+                if (res.code==1) {
+                    swal({
+                        title: "修改成功",
+                        type: "success"
+                    });
+                    setTimeout(function(){
+                        window.location.reload();
+                    },2000)
+                } else {
+                    swal({
+                        title: "修改失败",
+                        type: "error"
+                    });
+                }
+            });
+        }else{
+            swal({
+                title: "您确定要删除这些数据吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "是的，我要删除！",
+                cancelButtonText: "让我再考虑一下…",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.post('/admin/order/deletesorders',{ids:ids},function(res){
+                        if (res.code==1) {
+                            swal("删除成功！", "您已经永久删除了这些数据。", "success");
+                            setTimeout(function(){
+                                window.location.reload();
+                            },2000)
+                        } else {
+                            swal("已取消", "您取消了删除操作！", "error");
+                        }
+                    });
+                }else{
+                    swal("已取消", "您取消了删除操作！", "error");
+                }
+            });
+        }
+    }
+</script>
+{/block}

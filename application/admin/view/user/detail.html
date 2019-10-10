@@ -1,0 +1,247 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>会员信息</h5>
+                        <a href="{:url('/admin/user/index')}" class="btn btn-default btn-sm" style="float: right;">返回用户列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">ID:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.id}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">昵称: </label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.u_name}" placeholder="请输入昵称" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">手机号码:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.phone}" placeholder="请输入手机号码" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">性别: </label>
+                                <div class="col-md-3 col-sm-10">
+                                    <select class="form-control" disabled="disabled">
+                                        <option value="1" {$list.gender==1?'selected':''}>男</option>
+                                        <option value="2" {$list.gender==2?'selected':''}>女</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">年龄:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.birthday}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">个性签名:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.signature}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">兴趣:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.interest}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">VIP:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.vips}" placeholder="" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">VIP到期时间:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.viptime==''?'暂无买过VIP':date('Y-m-d H:i',$list.viptime)}" placeholder="" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">永久VIP:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="checkbox" class="js-switch edituservip" id="{$list.id}" u_name="{$list.vip}" {$list.vip==1?'checked':""} />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">约币: </label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.currency}" placeholder="" />
+                                </div>
+                                <a class="btn btn-primary btn-sm editusercurrency" uid="{$list.id}">修改</a>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">活跃时间:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.lasttime}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">注册时间:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{:date('Y-m-d H:i:s',$list.addtime)}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">头像:</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <img src="{:getPreviewUrl($list.icon)}" width="100" height="100" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" class="js-switch editusericon_status" id="{$list.id}" u_name="{$list.icon_status}" {$list.icon_status==1?'checked':""} />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">副图:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <img src="{$list.icon_v1}" width="100" height="100" alt="">
+                                    <img src="{$list.icon_v2}" width="100" height="100" alt="">
+                                    <img src="{$list.icon_v3}" width="100" height="100" alt="">
+                                    <img src="{$list.icon_v4}" width="100" height="100" alt="">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">大厅显示:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="checkbox" class="js-switch edituserhall" id="{$list.id}" u_name="{$list.hall}" {$list.hall==1?'checked':""} />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">账户启用状态: </label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="checkbox" class="js-switch edituserstatus" id="{$list.id}" u_name="{$list.status}" {$list.status==1?'checked':""} />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    /*switchery多个按钮 */
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+    elems.forEach(function(html) {
+        var switchery = new Switchery(html);
+    });
+
+    /* 修改用户的手机号码 */
+    $('.editusercurrency').click(function(){
+        var id = $(this).attr('uid');
+        console.log(id);
+        openIframeLayer("{:url('/admin/user/editusercurrency')}?uid=" + id, '修改约币', {
+            area: ['1000px', '400px'],
+            yes: function (index, layero) {
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+            }
+        });
+    });
+
+    /* 修改永久vip状态 */
+    $(document).on('change','.edituservip',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'vip'},function(res){
+                    window.location.reload();
+                });
+                break;
+            case '2':
+                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'vip'},function(res){
+                    window.location.reload();
+                });
+                break;
+        }
+    });
+
+
+    /* 修改头像启用 */
+    $(document).on('change','.editusericon_status',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'icon_status'},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'icon_status'},function(res){
+
+                });
+                break;
+        }
+    });
+
+    /* 修改账户启用 */
+    $(document).on('change','.edituserstatus',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'status'},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'status'},function(res){
+
+                });
+                break;
+        }
+    });
+
+
+    /* 修改大厅显示 */
+    $(document).on('change','.edituserhall',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'hall'},function(res){
+
+                });
+                break;
+            case '2':
+                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'hall'},function(res){
+
+                });
+                break;
+        }
+    });
+</script>
+{/block}

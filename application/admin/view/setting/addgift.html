@@ -1,0 +1,145 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>添加礼物</h5>
+                        <a href="/admin/setting/gift" class="btn btn-default btn-sm" style="float: right;">返回礼物列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图标: </label>
+                                <input type="hidden" name="pic" class="pic" id="thumbnail" value="" />
+                                <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                                    <img src="/static/img/default-thumbnail.png" id="thumbnail-preview" width="100" height="100" style="cursor: pointer" />
+                                </a>
+                                <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">礼品名称: </label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input name="g_name" type="text" class="form-control g_name" value="" placeholder="请输入礼品名称" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">价格(约币):</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input name="money" type="text" class="form-control money" value="" placeholder="请输入价格" autocomplete="off"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">作用: </label>
+                                <div class="col-md-6 col-sm-10">
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="inlineRadio1" value="1" name="type" checked>
+                                        <label for="inlineRadio1">聊天专用</label>
+                                    </div>
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="inlineRadio2" value="2" name="type">
+                                        <label for="inlineRadio2">发布约玩</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm addgift" type="button">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script src="/admin/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+    $(function () {
+        $('.btn-cancel-thumbnail').click(function () {
+                $('#thumbnail-preview').attr('src', '/static/img/default-thumbnail.png');
+                $('#thumbnail').val('');
+        });
+    });
+    
+    $(document).ready(function(){
+        /* 添加礼物 */
+        $('.addgift').click(function(){
+            /*图标*/
+            var pic = $('.pic').val();
+            /* 礼品名称 */
+            var g_name = $('.g_name').val();
+            /* 价格 */
+            var money = $('.money').val();
+            /* 作用 */
+            var type = $("input[name='type']:checked").val();
+
+            if(pic==''){
+                swal({
+                    title: "图标不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(g_name==''){
+                swal({
+                    title: "礼品名称不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(money==''){
+                swal({
+                    title: "价格不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(type==''){
+                swal({
+                    title: "作用不能为空",
+                    type:'error'
+                });
+                return false;
+            }else{
+            console.log(pic);
+            console.log(g_name);
+            console.log(money);
+            console.log(type);
+                $.post('/admin/setting/addgiftPost',{pic:pic,g_name:g_name,money:money,type:type},function(res){
+                    console.log(res);
+                    if(res.code==1){
+                        swal({
+                            title: "添加成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/setting/gift";
+                        },2000);
+                    }else{
+                        swal({
+                            title: res.msg,
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{/block}

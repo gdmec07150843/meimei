@@ -1,0 +1,100 @@
+{extend name="header:header"/}
+{block name="content"}
+<style type="text/css">
+    .table-responsive th, .table-responsive td{
+        text-align: center;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>管理员列表</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="{:url('/admin/adminuser/index')}" method="post" role="form" class="form-inline" style="padding-bottom:30px;">
+                                用户名: <input type="text" name="username" value="{$username|default=''}" placeholder="请输入用户名" style="width:200px;" class="form-control" />&nbsp;&nbsp;
+                                状态:
+                                <select class="form-control" name="status">
+                                    <option value="">全部</option>
+                                    <option value="1" {if condition="$status eq 1"}selected{/if}>启用</option>
+                                    <option value="2" {if condition="$status eq 2"}selected{/if}>禁用</option>
+                                </select>&nbsp;&nbsp;
+                            <input type="submit" class="btn btn-success" value="搜索" style="margin-bottom: 0;"/>
+                            <a class="btn btn-danger" href="">清空</a>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover ">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>用户名</th>
+                                    <th>角色</th>
+                                    <th>添加时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach name="list" item="vo"}
+                                        <tr>
+                                            <td>{$vo.id}</td>
+                                            <td>{$vo.username}</td>
+                                            {if condition="$vo.grade eq 1"}
+                                            <td>超级管理员</td>
+                                            {elseif condition="$vo.grade eq 2"/}
+                                            <td>管理员</td>
+                                            {/if}
+
+                                            <td>{$vo.creat_time}</td>
+
+                                            {if condition="$vo.status eq 1"}
+                                            <td>启用</td>
+                                            {elseif condition="$vo.status eq 2"/}
+                                            <td>禁用</td>
+                                            {/if}
+                                            {if condition="$vo.grade eq 1"}
+                                            <td>
+                                                <font color="#cccccc">编辑</font>
+                                                <font color="#cccccc">删除</font>
+                                                <font color="#cccccc">禁用</font>
+                                                <font color="#cccccc">权限管理</font>
+                                            </td>
+                                            {elseif condition="$vo.grade eq 2"/}
+                                            <td>
+                                                <a href="{:url('/admin/adminuser/edit',array('id'=>$vo['id']))}" class="btn btn-primary">编辑</a>
+                                                <a href="{:url('/admin/adminuser/delete',array('id'=>$vo['id']))}" class="btn btn-danger js-ajax-delete">删除</a>
+                                                {if condition="$vo.status eq 1"}
+                                                    <a href="{:url('/admin/adminuser/ban',array('id'=>$vo['id']))}" class="btn btn-danger btn-outline js-ajax-dialog-btn" data-msg="您确定要禁用此用户吗？">禁用</a>
+                                                {elseif condition="$vo.status eq 2"/}
+                                                    <a href="{:url('/admin/adminuser/cancelBan',array('id'=>$vo['id']))}" class="btn btn-danger btn-outline js-ajax-dialog-btn" data-msg="您确定要启用此用户吗？">启用</a>
+                                                {/if}
+                                                <a href="{:url('/admin/adminuser/menu',array('id'=>$vo['id']))}" class="btn btn-warning">权限管理</a>
+                                            </td>
+                                            {/if}
+                                        </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                            <div class="text-left pages">
+                                {$page}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+{/block}

@@ -1,0 +1,121 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<link href="/admin/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+<style>
+    .ibox_div_contain{
+        width:100%;
+        border:1px solid #505050;
+        box-sizing: border-box;
+        height:40px;
+        margin-right:-1px; margin-bottom:-1px;
+    }
+    .ibox_div{
+        width:30%;
+        height:40px;
+        line-height:40px;
+        border-right:1px solid #505050;
+        text-align: center;
+        display: inline-block;
+    }
+    .ibox_div2{
+        width:50%;
+        line-height:40px;
+        text-align: center;
+        display: inline-block;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>订单统计</h5>
+                    </div>
+                    <div class="ibox-content col-sm-6">
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                销售总额
+                            </div>
+                            <div class="ibox_div2">
+                                ￥{$list.o_total}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                有效订单总数
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.o_number}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                有效订单总额
+                            </div>
+                            <div class="ibox_div2">
+                                ￥{$list.order_total}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                无效订单总数(关闭或取消)
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.oi_number}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                无效订单总额
+                            </div>
+                            <div class="ibox_div2">
+                                ￥{$list.oi_total}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>会员统计</h5>
+                    </div>
+                    <div class="ibox-content col-sm-6">
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                新增用户数
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.zu_number}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                有订单会员数
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.ou_number}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                会员总数
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.u_number}
+                            </div>
+                        </div>
+                        <div class="ibox_div_contain">
+                            <div class="ibox_div">
+                                会员购物总额
+                            </div>
+                            <div class="ibox_div2">
+                                {$list.o_total}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

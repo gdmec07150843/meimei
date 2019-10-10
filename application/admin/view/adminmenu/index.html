@@ -1,0 +1,69 @@
+{extend name="header:header"/}
+{block name="content"}
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>后台菜单管理列表</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>菜单名称</th>
+                                        <th>父菜单id</th>
+                                        <th>应用名</th>
+                                        <th>控制器名</th>
+                                        <th>操作名称</th>
+                                        <th>分类路径</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {if condition="$list neq null"}
+                                        {volist name="list" id="vo"}
+                                       		<tr>
+        	                                    <td>{$vo.id}</td>
+                                                <td>{$vo.name}</td>
+                                                <td>{$vo.parent_id}</td>
+        	                                    <td>{$vo.app}</td>
+                                                <td>{$vo.controller}</td>
+                                                <td>{$vo.action}</td>
+        	                                    <td>{$vo.path}</td>
+        	                                    <td>
+                                                    <a href="{:url('/admin/adminmenu/edit',array('id'=>$vo['id']))}" class="btn btn-primary">编辑</a>
+        	                                        <a href="{:url('/admin/adminmenu/delete',array('id'=>$vo['id']))}" class="btn btn-danger js-ajax-delete">删除</a>
+        	                                    </td>
+        	                                </tr>
+                                        {/volist}
+                                    {else/}
+                                        <tr>
+                                            <td style="font-size:20px;text-align:center">暂无数据</td>
+                                        </tr>
+                                    {/if}
+                                </tbody>
+                            </table>
+                            <div class="text-right pages">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+{/block}

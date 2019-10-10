@@ -1,0 +1,120 @@
+{extend name="header:header"/}
+{block name="content"}
+<link href="/admin/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<style type="text/css" media="screen">
+	.form-required{
+		color:red;
+	}
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>添加轮播图</h5>
+                        <a href="{:url('/admin/flash/index')}" class="btn btn-default btn-sm" style="float: right;">返回轮播列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="form" class="form-horizontal m-t">
+                        	<div class="form-group">
+                                <label class="col-sm-3 control-label">轮播图<span class="form-required">*</span></label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="f_pic" id="thumbnail" value="" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                                        <img src="/static/img/default-thumbnail.png"
+                                             id="thumbnail-preview"
+                                             width="100" height="100" style="cursor: pointer" />
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+                                </div>
+                            </div>
+                            <div class="form-group">
+								<label class="col-sm-3 control-label">状态<span class="form-required">*</span></label>
+								<div class="col-md-6 col-sm-10">
+									<select class="form-control" name="status">
+			                            <option value="">请选择状态</option>
+			                            <option value="1">新添加</option>
+			                            <option value="2">上架</option>
+			                            <option value="3">下架</option>
+			                        </select>&nbsp;&nbsp;
+								</div>
+							</div>
+							<div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm addflash" type="button">添加</button>
+                                    <a class="btn btn-default" href="{:url('/admin/flash/index')}">返回</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ajax加载动画 -->
+    <div class="spiner" style="position:fixed;top:0;left:0;z-index:2;width:100%;height:100%;display:none">
+        <div class="spiner-example" style="position:absolute;top:50%;left:50%">
+            <div class="sk-spinner sk-spinner-fading-circle">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail').val('');
+        });
+    });
+	$('.addflash').click(function(){
+		var form = new FormData(document.getElementById("form"));
+	    $.ajax({
+	        url:"/admin/flash/addPost",
+	        type:"post",
+	        data:form,
+	        processData:false,
+	        contentType:false,
+	        success:function(data){
+	            if(data.code==1){
+	                swal({
+	                    title: "添加成功",
+	                    type: "success"
+	                });
+	                setTimeout(function(){
+	                    window.location.href="/admin/flash/index";
+	                },2000);
+	            }else{
+	                swal({
+	                    title: "添加失败",
+	                    type: "error"
+	                });
+	            }
+	        }
+	    });
+	});
+</script>
+{/block}

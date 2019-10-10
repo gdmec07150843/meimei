@@ -1,0 +1,38 @@
+.outer_frame{
+	padding:0 0 14px;
+}
+.wrapper-content .pending{
+	width:86%;
+	margin-left:20px;
+}
+
+.wrapper-content .o_number{
+	float:right;
+	margin-right: 30px;
+}
+
+.wrapper-content .o_link{
+	width:100%;
+	border:0.5px solid rgb(103,106,108);
+	margin-top:30px;
+}
+
+.wrapper-content .o_right{
+	margin-right: 125px;
+}
+
+.select_status{
+	height:34px;
+	width:80px;
+}
+
+.btn_color{
+	background-color: rgb(26, 179, 148); 
+	border-color: rgb(26, 179, 148); 
+	box-shadow: rgb(26, 179, 148) 0px 0px 0px 16px inset; 
+	transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;
+}
+
+.form-required{
+	color:red;
+}

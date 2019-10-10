@@ -1,0 +1,73 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<link href="/admin/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>销售统计</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="{:url('/admin/Financial/index')}" method="post" role="form" class="form-inline" style="padding-bottom:30px;">
+                            药品分类:
+	                        <select class="form-control" name="cid">
+	                            <option value="">全部</option>
+	                            {if condition="$category neq null"}
+	                                {volist name="category" id="vo"}
+	                                    <option value="{$vo.id}" {$cid==$vo['id']?'selected':''}>{$vo.c_name}</option>
+	                                {/volist}
+	                            {else/}
+	                                <option value="">暂时没有药品分类可以选择</option>
+	                            {/if}
+	                        药品名称: <input type="text" name="g_name" value="{$g_name|default=''}" autocomplete="off" placeholder="请输入药品名称" style="width:200px;" class="form-control" />&nbsp;&nbsp;
+                            <input type="submit" class="btn btn-success" value="搜索" style="margin-bottom: 0;"/>
+                            <a class="btn btn-danger" href="">清空</a>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="f3">
+                                <thead>
+	                                <tr>
+	                                	<th>序号</th>
+	                                    <th>药品分类</th>
+	                                    <th>药品名称</th>
+	                                    <th>下单数量</th>
+	                                    <th>已成交订单总额</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+                                	{if condition="$list neq null"}
+                                		{volist name="list" id="vo"}
+		                                    <tr>
+		                                    	<td>{$vo.id}</td>
+		                                    	<td>{$vo.c_name}</td>
+		                                    	<td>{$vo.g_name}</td>
+		                                    	<td>{$vo.o_number}</td>
+		                                    	<td>￥{$vo.total}</td>								
+		                                    </tr>
+	                                    {/volist}
+	                                {else/}
+	                                	<tr>
+	                                		<td style="font-size:14px;text-align:center;">暂无数据</td>
+	                                	</tr>
+	                                {/if}
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-hover">
+                            	<tbody>
+                            		<tr>
+                                        <td class="text-right pages">
+			                            	{$page}
+			                            </td>
+                                    </tr>
+                            	</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

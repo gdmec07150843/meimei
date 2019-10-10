@@ -1,0 +1,88 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>修改协议</h5>
+                        <a href="{:url('/admin/agreement/index')}" class="btn btn-default btn-sm" style="float: right;">返回协议列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <input type="hidden" name="id" class="aid" value="{$list.id}">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">服务协议内容: <span class="form-required">*</span></label>
+                                <div class="col-md-6 col-sm-10">
+                                    <script id="content" class="content" name="content" type="text/plain">{$list.content|htmlspecialchars_decode|stripslashes}</script>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm editagreement" type="button">修改</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<!-- 配置文件 -->
+<script type="text/javascript" src="/admin/js/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/admin/js/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+   var ue = UE.getEditor('content');
+</script>
+<script>
+    $(document).ready(function(){
+        /* 修改协议 */
+        $('.editagreement').click(function(){
+            /* 协议id */
+            var id = $('.aid').val();
+            /* 协议内容 */
+            var content = UE.getEditor('content').getContent();
+            if(content==''){
+                swal({
+                    title: "服务协议内容不能为空",
+                    type:'error'
+                });
+                return false;
+            }else{
+                $.post('/admin/agreement/editPost',{id:id,content:content},function(res){
+                    if(res.code==1){
+                        swal({
+                            title: "修改成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/agreement/index";
+                        },2000);
+                    }else{
+                        swal({
+                            title: "修改失败",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{/block}

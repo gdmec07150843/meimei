@@ -1,0 +1,269 @@
+{extend name="header:header"/}
+{block name="content"}
+<link href="/admin/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<style type="text/css" media="screen">
+	.form-required{
+		color:red;
+	}
+	label{
+		font-size:16px;
+	}
+    .fileupload-div{width:20%;}
+    .good-uploadimg{width:200px;height:200px;}
+    .good-uploadview{width:100%;height:100%;}
+</style>
+<script type="text/html" id="photos-item-tpl">
+    <li id="saved-image{id}" style="display:block;">
+        <input id="photo-{id}" type="hidden" name="photo_urls[]" value="{filepath}">
+        <input class="form-control" id="photo-{id}-name" type="text" name="photo_names[]" value="{name}"
+               style="width: 200px;display:inline-block;" title="图片名称">
+        <img id="photo-{id}-preview" src="{imgs}" style="height:36px;width: 36px;cursor: pointer;"
+             onclick="imagePreviewDialog(this.src);">
+        <a href="javascript:uploadOneImage('图片上传','#photo-{id}');">替换</a>
+        <a href="javascript:(function(){$('#saved-image{id}').remove();})();">移除</a>
+    </li>
+</script>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>添加药品</h5>
+                        <a href="{:url('/admin/goods/index')}" class="btn btn-default btn-sm" style="float: right;">返回药品列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="form" class="wizard-big">
+                            <h1>选择分类</h1>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>选择药品分类 <span class="form-required">*</span></label>
+                                            <select class="form-control" name="cid">
+					                            <option value="">请选择药品分类</option>
+					                            {if condition="$category neq null"}
+					                            	{volist name="$category" id="vo"}
+					                            		<option value="{$vo.id}">{$vo.c_name}</option>
+					                            	{/volist}
+					                            {else/}
+					                            	<option value="">暂无药品分类</option>
+					                            {/if}
+					                        </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <h1>基本信息</h1>
+                            <fieldset style="position: relative;">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                        	<label>药品名 <span class="form-required">*</span></label>
+                                            <input name="g_name" type="text" class="form-control required">
+                                        </div>
+                                    </div>
+                                   	<div class="col-sm-12">
+                                   		<div class="form-group">
+                                            <label>药品图 <span class="form-required">*</span><p class="form-required" style="font-size:12px;">最多可以上传5张图片，建议尺寸800*800px</p></label>
+                                            <input type="hidden" name="g_pic[thumbnail]" id="thumbnail" value="">
+                                            <ul id="photos" class="pic-list list-unstyled form-inline"></ul>
+                                            <a href="javascript:uploadMultiImage('图片上传','#photos','photos-item-tpl');"
+                                                   class="btn btn-default btn-sm">选择图片</a>
+                                        </div>
+                                   	</div>
+                                   	<div class="col-sm-12" style="margin-top: 20px;">
+                                		<div class="form-group">
+                                			<label>药品货号 <span class="form-required">*</span></label>
+                                			<input type="text" name="g_number" class="form-control required">
+                                		</div>
+                                	</div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>药品简介 <span class="form-required">*</span></label>
+                                            <textarea class="form-control" rows="6" name="g_description" placeholder="请填写药品简介"></textarea>
+                                        </div>
+                                    </div>
+                                   	<div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>药品详情 <span class="form-required">*</span></label>
+                                            <script id="g_content" class="g_content" name="g_content" type="text/plain"></script>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>药品说明 <span class="form-required">*</span></label>
+                                            <script id="g_manual" class="g_manual" name="g_manual" type="text/plain"></script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <h1>药品规格、库存</h1>
+                            <fieldset style="position: relative;">
+                                <div class="row">
+                                	<div class="col-sm-6">
+                                		<div class="form-group">
+                                			<label>商品规格 <span class="form-required">*</span></label>
+                                			<button class="btn btn-primary btn-sm addgoodsinfo" style="float:right;margin-right: 10px;" type="button">添加</button>
+                                			<table class="table table-bordered">
+	                                            <thead id="thead">
+	                                                <tr>
+	                                                    <th>药品价格 <span class="form-required">*</span></th>
+	                                                    <th>药品成本 <span class="form-required">*</span></th>
+	                                                    <th>规格值 <span class="form-required">*</span></th>
+	                                                    <th>单位 <span class="form-required">*</span></th>
+                                                        <th>库存 <span class="form-required">*</span></th>
+	                                                    <th>操作</th>
+	                                                </tr>
+	                                            </thead>
+                                            	<tbody class="goodsstyle">
+                                            		<tr class="styles">
+                                            			<td><input type="text" name="g_price[]" class="form-control t_style"></td>
+                                            			<td><input type="text" name="g_total[]" class="form-control"></td>
+                                            			<td><input type="text" name="s_value[]" class="form-control"></td>
+                                            			<td><input type="text" name="unit[]" class="form-control"></td>
+                                                        <td><input type="text" name="g_stock[]" class="form-control"></td>
+                                            			<td>
+                                            				<a class="btn btn-danger btn-sm remove_style">删除</a>
+                                            			</td>
+                                            		</tr>
+                                            	</tbody>
+                                        	</table>
+                                		</div>
+                                	</div>
+                                	<div class="col-sm-12">
+                                		<div class="form-group">
+                                			<label>药品状态 <span class="form-required">*</span></label>
+                                			<select class="form-control" name="g_status">
+					                            <option value="1">新添加</option>
+					                            <option value="2">上架</option>
+					                            <option value="3">下架</option>
+					                        </select>
+                                		</div>
+                                	</div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ajax加载动画 -->
+    <div class="spiner" style="position:fixed;top:0;left:0;z-index:2;width:100%;height:100%;display:none">
+        <div class="spiner-example" style="position:absolute;top:50%;left:50%">
+            <div class="sk-spinner sk-spinner-fading-circle">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<!-- Steps -->
+<script src="/admin/js/plugins/staps/jquery.steps.min.js"></script>                                                
+<!-- Jquery Validate -->
+<script src="/admin/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/admin/js/plugins/validate/messages_zh.min.js"></script>
+<!-- 配置文件 -->
+<script type="text/javascript" src="/admin/js/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/admin/js/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+   var ue = UE.getEditor('g_content');
+</script>
+<script type="text/javascript">
+   var ue = UE.getEditor('g_manual');
+</script>
+<script>
+    
+    $("#form").steps({
+        bodyTag: "fieldset",
+        onFinished: function (event, currentIndex) {
+            var form = new FormData(document.getElementById("form"));
+            var g_content = UE.getEditor('g_content').getContent();
+            var g_manual  = UE.getEditor('g_manual').getContent();
+            form.append('g_content',g_content);
+            form.append('g_manual',g_manual);
+            $.ajax({
+                url:"/admin/goods/addPost",
+                type:"post",
+                data:form,
+                processData:false,
+                contentType:false,
+                beforeSend:function() {
+                    //请求中
+                    $(".spiner").css("display","block");
+                },
+                success:function(data){
+                    if(data.code==1){
+                        swal({
+                            title: "添加成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/goods/index";
+                        },2000);
+                    }else{
+                        swal({
+                            title: "添加失败",
+                            type: "error"
+                        });
+                    }
+                },
+                complete:function() {
+                    //请求完成
+                    $(".spiner").css("display","none")
+                }
+            }); 
+        }
+    });
+
+    /* 规格 */
+  	$(document).on('click','.addgoodsinfo', function() {
+	    var last = $('.styles:last');
+		var s = $('.t_style').length;
+	    var lv1HTML = '<tr class="styles">'+
+                			'<td><input type="text" name="g_price[]" class="form-control t_style"></td>'+
+                			'<td><input type="text" name="g_total[]" class="form-control"></td>'+
+                			'<td><input type="text" name="s_value[]" class="form-control"></td>'+
+                			'<td><input type="text" name="unit[]" class="form-control"></td>'+
+                            '<td><input type="text" name="g_stock[]" class="form-control"></td>'+
+                			'<td>'+
+                				'<a class="btn btn-danger btn-sm remove_style">删除</a>'+
+                			'</td>'+
+                		'</tr>';
+	    if (s == 0) {
+	        $('.goodsstyle').append(lv1HTML);
+	    } else {
+	        last.after(lv1HTML);
+	    }
+
+  	});
+
+  	$(document).on('click','.remove_style', function() {
+		$(this).parents('.styles').remove();
+  	});
+</script>
+{/block}
