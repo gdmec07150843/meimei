@@ -38,7 +38,7 @@
                                             <td>{$vo.money}</td>
                                             <td>
                                                 {if condition="$vo['pic'] neq null"}
-                                                        <a href="{:getPreviewUrl($vo['pic'])}" title="图片" data-gallery=""><img src="{:getPreviewUrl($vo['pic'])}" alt="" width="50px" height="50px"></a>
+                                                        <a href="{$vo['pic']}" title="图片" data-gallery=""><img src="{$vo['pic']}" alt="" width="50px" height="50px"></a>
                                                 {/if}
                                             </td>
                                             <td>

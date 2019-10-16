@@ -1,0 +1,160 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>同城约玩详情</h5>
+                        <a href="{:url('/admin/dating/samecity')}" class="btn btn-default btn-sm" style="float: right;">返回同城约玩列表</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发布人:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.phone}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发布定位: </label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.location}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">约会期望:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{switch name="$list.hope"}
+                                                        {case value="1"}单约{/case}
+                                                        {case value="2"}聚会{/case}
+                                                    {/switch}" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">约会方式:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.content}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邀玩时间: </label>
+                                    <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{switch name="$list.happytime"}
+                                                        {case value="1"}随时{/case}
+                                                        {case value="2"}周末{/case}
+                                                        {default /}{:date('Y-m-d H:i',$list.happytime)}
+                                                    {/switch}" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">买单方式: </label>
+                                    <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{switch name="$list.payway"}
+                                                        {case value="1"}AA制{/case}
+                                                        {case value="2"}我买单{/case}
+                                                    {/switch}" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">允许带朋友: </label>
+                                    <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{switch name="$list.bring_friend"}
+                                                        {case value="1"}允许{/case}
+                                                        {case value="2"}不允许{/case}
+                                                    {/switch}" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">剩余时间:</label>
+                                <div class="col-md-1 col-sm-5">
+                                    <input type="text" disabled="disabled" class="form-control" value="{$list.daynum}天"/>
+                                </div>
+                                <a onclick="editnum({$list.id})" class="btn btn-primary btn-sm">修改</a>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">约会状态:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{switch name="$list.d_status"}
+                                                        {case value="1"}发布中{/case}
+                                                        {case value="2"}已下架{/case}
+                                                    {/switch}" placeholder="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发布状态:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="checkbox" class="js-switch edituserstatus" id="{$list.id}" u_name="{$list.d_status}" {$list.d_status==1?'checked':""} />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发布时间:</label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input type="text" disabled="disabled" class="form-control" value="{:date('Y-m-d H:i:s',$list.addtime)}" placeholder="" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    /*switchery多个按钮 */
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+    elems.forEach(function(html) {
+        var switchery = new Switchery(html);
+    });
+
+    /* 修改发布状态 */
+    $(document).on('change','.edituserstatus',function(){
+        var id = $(this).attr('id');
+        switch ($(this).attr('u_name')) {
+            case '1':
+                $.post('/admin/dating/editsamecity',{id:id,status:2},function(res){
+                    window.location.reload();
+                });
+                break;
+            case '2':
+                $.post('/admin/dating/editsamecity',{id:id,status:1},function(res){
+                    if(res.code == 3){
+                        swal("修改失败",res.msg, "error");
+                        setTimeout(function(){
+                            window.location.reload();
+                        },2000)
+                    }else{
+                        window.location.reload();
+                    }   
+                });
+                break;
+        }
+    });
+
+    /* 弹窗 */
+    function editnum(id){
+      layer.open({
+            type: 2,
+            area: ['900px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/admin/dating/open?id='+id
+      });
+    }
+</script>
+{/block}

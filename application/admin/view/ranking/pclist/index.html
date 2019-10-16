@@ -1,0 +1,93 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<style type="text/css">
+    .table-responsive th, .table-responsive td{
+        text-align: center;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>PC榜</h5>
+                        <a href="{:url('/admin/ranking/addpclist')}" class="btn btn-primary btn-sm" style="float:right;">添加PC榜</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="{:url('/admin/ranking/pclist')}" method="post" role="form" class="form-inline" style="padding-bottom:30px;">
+                            男性手机号: <input type="text" name="m_phone" value="{$m_phone|default=''}" autocomplete="off" placeholder="请输入男性手机号" style="width:200px;" class="form-control" />&nbsp;&nbsp;  
+                            女性手机号: <input type="text" name="w_phone" value="{$w_phone|default=''}" autocomplete="off" placeholder="请输入女性手机号" style="width:200px;" class="form-control" />&nbsp;&nbsp;  
+                            <input type="submit" class="btn btn-success btn-sm" value="搜索" style="margin-bottom: 0;"/>
+                            <a class="btn btn-danger btn-sm" href="">清空</a>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="f3">
+                                <thead>
+	                                <tr>
+	                                	<th>序号</th>
+	                                	<th>男性手机号</th>
+	                                    <th>女性手机号</th>
+	                                    <th>心动值</th>
+	                                    <th>配对时间</th>
+	                                    <th>开启状态</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+                                	{if condition="$list neq null"}
+                                		{volist name="list" id="vo"}
+		                                    <tr>
+		                                    	<td>{$i}</td>	
+		                                    	<td>{$vo.m_phone}</td>	
+		                                    	<td>{$vo.w_phone}</td>	
+		                                    	<td>{$vo.heartbeat}</td>
+		                                    	<td>{:date('Y-m-d H:i',$vo.addtime)}</td>
+		                                    	<td>
+		                                    		<input type="checkbox" class="js-switch editpcstatus" id="{$vo.id}" u_name="{$vo.status}" {$vo.status==1?'checked':""} />
+		                                    	</td>			
+		                                    </tr>
+	                                    {/volist}
+	                                {/if}
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-hover">
+                            	<tbody>
+                            		<tr>
+                                        <td class="text-right pages">
+			                            	{$page}
+			                            </td>
+                                    </tr>
+                            	</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    	/*switchery多个按钮 */
+	    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+	    elems.forEach(function(html) {
+	        var switchery = new Switchery(html);
+	    });
+
+        /* 修改开启状态 */
+	    $(document).on('change','.editpcstatus',function(){
+	        var id = $(this).attr('id');
+	        switch ($(this).attr('u_name')) {
+	            case '1':
+	                $.post('/admin/ranking/editpcstatus',{id:id,status:2},function(res){
+	                	window.location.reload();
+	                });
+	                break;
+	            case '2':
+	                $.post('/admin/ranking/editpcstatus',{id:id,status:1},function(res){
+	                	window.location.reload();
+	                });
+	                break;
+	        }
+	    });
+    </script>
+{/block}

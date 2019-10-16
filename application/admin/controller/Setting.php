@@ -364,4 +364,109 @@ class Setting extends Common
             return returnJson($code=2,$msg="提交失败",$list);
         }
     }
+
+
+
+    /**
+     * 基础图片设置页面
+     */
+    public function basicpic()
+    {
+        $pic = Db::name('basicpic')->select();
+        $this->assign('pic',$pic);
+        return $this->fetch();
+    }
+
+
+    /**
+     * 基础图片页面编辑
+     */
+    public function editpic()
+    {
+        $data = $this->request->param();
+        $list = Db::name('basicpic')->where('id',$data['id'])->find();
+        $this->assign('list',$list);
+        return $this->fetch();
+    }
+
+
+    /**
+     * 基础图片页面编辑提交
+     */
+    public function editpicPost()
+    {
+        $data = $this->request->param();
+        if($data['id'] == 1){
+            $map = [
+                'img1'=>$data['img1'],
+                'img2'=>$data['img2'],
+                'img3'=>$data['img3']   
+            ];
+        }
+
+        if($data['id'] == 2 || $data['id'] == 3){
+            $map = [
+                'img1'=>$data['img1']
+            ];
+        }
+
+        if($data['id'] == 4){
+            $map = [
+                'img1'=>$data['img1'],
+                'img2'=>$data['img2'],
+                'img3'=>$data['img3'],
+                'img4'=>$data['img4'],
+                'img5'=>$data['img5']    
+            ];
+        }        
+        // dump($map);
+        // exit;
+        $list = Db::name('basicpic')->where('id',$data['id'])->update($map);
+        if($list){
+            return returnJson($code=1,$msg="修改成功",$list);
+        }else{
+            return returnJson($code=2,$msg="修改失败",$list);
+        }
+    }
+
+
+    /**
+     * 基础文案设置页面
+     */
+    public function basiccopy()
+    {
+        $list = Db::name('basiccopy')->select();
+        $this->assign('list',$list);
+        return $this->fetch();
+    }   
+
+
+    /**
+     * 基础文案编辑
+     */
+    public function editcopy()
+    {
+        $data = $this->request->param();
+        $list = Db::name('basiccopy')->where('id',$data['id'])->find();
+        $this->assign('list',$list);
+        return $this->fetch();
+    }
+
+
+    /**
+     * 基础文案编辑提交
+     */
+    public function editPostcopy()
+    {
+        $data = $this->request->param();
+        $map = [
+            'content'=>$data['content']
+        ];
+        $list = Db::name('basiccopy')->where('id',$data['id'])->update($map);
+        if($list){
+            return returnJson($code=1,$msg="修改成功",$list);
+        }else{
+            return returnJson($code=2,$msg="修改失败",$list);
+        }
+    }
 }

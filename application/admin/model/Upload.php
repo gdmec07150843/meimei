@@ -268,7 +268,7 @@ class Upload
         //关闭文件对象
         $fileImage = null;
         //检查文件是否已经存在
-        $objAsset   = Db::table('sz_asset')->where(["user_id" => $userId, "file_key" => $arrInfo["file_key"]])->find();
+        $objAsset   = Db::table('aaz_asset')->where(["user_id" => $userId, "file_key" => $arrInfo["file_key"]])->find();
         if ($objAsset) {
 
             $arrInfo["file_path"] = $objAsset["file_path"];
@@ -285,7 +285,7 @@ class Upload
             }
 
         } else {
-            Db::table('sz_asset')->data($arrInfo)->insert();
+            Db::table('aaz_asset')->data($arrInfo)->insert();
         }
 
         //删除临时文件

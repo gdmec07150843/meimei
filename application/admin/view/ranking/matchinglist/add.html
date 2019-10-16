@@ -1,0 +1,135 @@
+{extend name="header:header"/}
+{block name="content"}
+	<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+                        <h5>添加直约配对榜</h5>
+                        <a href="/admin/ranking/matchinglist" class="btn btn-default btn-sm" style="float: right;">返回直约配对榜</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal js-ajax-form m-t">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发布人手机号：<span class="form-required">*</span></label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input name="phone" type="text" class="form-control phone" value="" placeholder="请输入发布人手机号" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邀约人手机号：<span class="form-required">*</span></label>
+                                <div class="col-md-3 col-sm-10">
+                                    <input name="phone2" type="text" class="form-control phone2" value="" placeholder="请输入邀约人手机号" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">道具<span class="form-required">*</span></label>
+                                <div class="col-md-3 col-sm-10">
+                                    <select class="form-control gift" id="gift" name="gift">
+                                        <option value="">请选择道具</option>
+                                        {if condition="$gift neq null"}
+                                            {volist name="gift" id="vo"}
+                                                <option value="{$vo.id}">{$vo.g_name}</option>
+                                            {/volist}
+                                        {/if}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">配对时间<span class="form-required">*</span></label>
+                                <div class="col-md-2 col-sm-10">
+                                    <input placeholder="配对时间" readonly="readonly" class="form-control layer-date addtime" name="addtime" id="addtime"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm addmatchinglist" type="button">添加</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/admin/js/layer/laydate.js"></script>
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+
+        //开始时间
+    laydate.render({
+      elem: '#addtime'
+    });
+
+    $(document).ready(function(){
+        $('.addmatchinglist').click(function(){
+            var phone = $('.phone').val();
+            var phone2 = $('.phone2').val();
+            var gift = $('#gift option:selected').val();
+            var addtime = $('.addtime').val();
+
+            console.log(phone);
+            console.log(phone2);
+            console.log(gift);
+            console.log(addtime);
+            if(phone==''){
+                swal({
+                    title: "发布人手机号不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(phone2==''){
+                swal({
+                    title: "邀约人手机号不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(gift==''){
+                swal({
+                    title: "道具不能为空",
+                    type:'error'
+                });
+                return false;
+            }else if(addtime==''){
+                swal({
+                    title: "配对时间不能为空",
+                    type:'error'
+                });
+                return false;
+            }
+            else{
+                $.post('/admin/ranking/addmatchinglistPost',{phone:phone,phone2:phone2,gid:gift,addtime:addtime},function(res){
+                    if(res.code==1){
+                        swal({
+                            title: "添加成功",
+                            type: "success"
+                        });
+                        setTimeout(function(){
+                            window.location.href="/admin/ranking/matchinglist";
+                        },2000);
+                    }else if(res.code==2){
+                        swal({
+                            title: "添加失败",
+                            type: "error"
+                        });
+                    }else{
+                        swal({
+                            title: res.msg,
+                            type: "error"
+                        });
+                    }
+                });
+            }
+
+        });
+    });
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+{/block}

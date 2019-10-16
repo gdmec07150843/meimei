@@ -149,12 +149,12 @@
 	        switch ($(this).attr('u_name')) {
 	            case '1':
 	                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'hall'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	            case '2':
 	                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'hall'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	        }
@@ -183,12 +183,12 @@
 	        switch ($(this).attr('u_name')) {
 	            case '1':
 	                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'icon_status'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	            case '2':
 	                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'icon_status'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	        }
@@ -201,12 +201,12 @@
 	        switch ($(this).attr('u_name')) {
 	            case '1':
 	                $.post('/admin/user/edituserstatus',{id:id,status:2,name:'status'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	            case '2':
 	                $.post('/admin/user/edituserstatus',{id:id,status:1,name:'status'},function(res){
-
+	                	window.location.reload();
 	                });
 	                break;
 	        }

@@ -1,0 +1,50 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">{$list.title}</label>
+                                <div class="col-sm-6">
+                                    <textarea class="form-control content" name="content" id="content" style="height: 250px">{$list.content}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm edituserphone" id="{$list.id}" type="button">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    $('.edituserphone').click(function(){
+        var id = $(this).attr('id');
+        var content = $('.content').val();
+        $.post('/admin/setting/editPostcopy',{id:id,content:content},function(res){
+            if(res.code ==1){
+                 swal("提交成功！", "您已经提交了这条数据。", "success");
+                 setTimeout(function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    window.parent.location.reload();
+                    parent.layer.close(index);
+                },2000);
+            }
+            else{
+                swal("撤销失败", "您取消了提交操作！", "error");
+            }
+        });
+    });
+</script>
+{/block}
+
+

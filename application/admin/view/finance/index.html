@@ -1,0 +1,164 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<style type="text/css">
+    .table-responsive th, .table-responsive td{
+        text-align: center;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>提现审核</h5>
+                        <!-- <a href="{:url('/admin/user/add')}" class="btn btn-primary btn-sm" style="float:right;">添加用户</a> -->
+                    </div>
+                    <div class="ibox-content">
+                        <form action="{:url('/admin/finance/index')}" method="post" role="form" class="form-inline" style="padding-bottom:30px;">
+                            提现单号: <input type="text" name="order_num" value="{$order_num|default=''}" autocomplete="off" placeholder="请输入提现单号" style="width:200px;" class="form-control" />&nbsp;&nbsp;  
+                            提现账号: <input type="text" name="account" value="{$account|default=''}" autocomplete="off" placeholder="请输入提现账号" style="width:200px;" class="form-control" />&nbsp;&nbsp;    
+                            提现状态:
+                            <select class="form-control" name="status">
+                                <option value="">全部</option>
+                                <option value="1" {$status==1?'selected':''}>待审核</option>
+                                <option value="2" {$status==2?'selected':''}>通过</option>
+                                <option value="3" {$status==3?'selected':''}>不通过</option>
+                            </select>&nbsp;&nbsp;
+                            <input type="submit" class="btn btn-success btn-sm" value="搜索" style="margin-bottom: 0;"/>
+                            <a class="btn btn-danger btn-sm" href="">清空</a>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="f3">
+                                <thead>
+	                                <tr>
+	                                	<th>序号</th>
+	                                	<th>提现单号</th>
+	                                    <th>账户手机号</th>
+	                                    <th>支付宝账号</th>
+	                                    <th>支付宝姓名</th>
+	                                    <th>提现金额</th>
+	                                    <th>提交时间</th>
+	                                    <th>操作时间</th>
+	                                    <th>提现状态</th>
+	                                    <th>操作</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+                                	{if condition="$list neq null"}
+                                		{volist name="list" id="vo"}
+		                                    <tr>
+		                                    	<td>{$i}</td>	
+		                                    	<td>{$vo.order_num}</td>	
+		                                    	<td>{$vo.phone}</td>	
+		                                    	<td>{$vo.account}</td>
+		                                    	<td>{$vo.zfb_name}</td>
+		                                    	<td>￥{$vo.money}.00</td>
+		                                    	<td>{:date('Y-m-d H:i:s',$vo.addtime)}</td>
+		                                    	<td>
+		                                    		{switch name="$vo.endtime"}
+                                                        {case value=""}-{/case}
+                                                        {default /}{:date('Y-m-d H:i',$vo.endtime)}
+                                                    {/switch}
+		                                    	</td>
+		                                    	<td>
+		                                    		{switch name="$vo.status"}
+                                                        {case value="1"}待审核{/case}
+                                                        {case value="2"}已通过{/case}
+                                                        {case value="3"}不通过{/case}
+                                                    {/switch}
+		                                    	</td>
+		                                    	<td>
+		                                    		{switch name="$vo.status"}
+		                                    		 {case value="1"}
+			                                    		<a onclick="success({$vo.id})" class="btn btn-primary">通过</a>
+			                                    		<a href="" class="btn btn-primary">不通过</a>
+			                                    	 {/case}
+			                                    	 {default /}-
+		                                    		{/switch}
+		                                    	</td>					
+		                                    </tr>
+	                                    {/volist}
+	                                {/if}
+                                </tbody>
+                            </table>
+                            <table class="table table-striped table-hover">
+                            	<tbody>
+                            		<tr>
+                                        <td class="text-right pages">
+			                            	{$page}
+			                            </td>
+                                    </tr>
+                            	</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+	    /* 通过单条数据 */
+	    function success(id){
+	    	swal({
+	            title: "您确定要通过这条数据吗",
+	            text: "通过后将无法恢复，请谨慎操作！",
+	            type: "warning",
+	            showCancelButton: true,
+	            confirmButtonColor: "#DD6B55",
+	            confirmButtonText: "是的，我要通过！",
+	            cancelButtonText: "让我再考虑一下…",
+	            closeOnConfirm: false,
+	            closeOnCancel: false
+	        },
+	        function (isConfirm) {
+	        	if (isConfirm) {
+				    $.post('/admin/finance/editstatus',{id:id,status:2},function(res){
+			        	if (res.code==1) {
+			                swal("通过成功！", "您执行了通过操作。", "success");
+			                setTimeout(function(){
+			                	window.location.reload();
+			                },2000)
+			            } else {
+			                swal("已取消", "您取消了通过操作！", "error");
+			            }
+		        	});
+				}else{
+					swal("已取消", "您取消了通过操作！", "error");
+				}
+	        });
+	    }
+
+	    /* 不通过数据 */
+	    function fail(id){
+	    	swal({
+	            title: "您确定要不通过这条数据吗",
+	            text: "不通过后将无法恢复，请谨慎操作！",
+	            type: "warning",
+	            showCancelButton: true,
+	            confirmButtonColor: "#DD6B55",
+	            confirmButtonText: "是的，我要不通过！",
+	            cancelButtonText: "让我再考虑一下…",
+	            closeOnConfirm: false,
+	            closeOnCancel: false
+	        },
+	        function (isConfirm) {
+	        	if (isConfirm) {
+				    $.post('/admin/finance/editstatus',{id:id,status:3},function(res){
+			        	if (res.code==1) {
+			                swal("不通过成功！", "您已经不通过了这条数据。", "success");
+			                setTimeout(function(){
+			                	window.location.reload();
+			                },2000)
+			            } else {
+			                swal("已取消", "您取消了不通过操作！", "error");
+			            }
+		        	});
+				}else{
+					swal("已取消", "您取消了不通过操作！", "error");
+				}
+	        });
+	    }
+    </script>
+{/block}

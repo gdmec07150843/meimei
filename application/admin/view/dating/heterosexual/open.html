@@ -1,0 +1,61 @@
+{extend name="header:header"/}
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="/admin/css/common.css">
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+            	<!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">剩余时间</label>
+                                <div class="col-md-6 col-sm-3">
+                                    <select class="form-control num" name="num">
+                                        <option value="1" {$num==1?'selected':''}>1天</option>
+                                        <option value="2" {$num==2?'selected':''}>2天</option>
+                                        <option value="3" {$num==3?'selected':''}>3天</option>
+                                        <option value="4" {$num==4?'selected':''}>4天</option>
+                                        <option value="5" {$num==5?'selected':''}>5天</option>
+                                        <option value="6" {$num==6?'selected':''}>6天</option>
+                                        <option value="7" {$num==7?'selected':''}>7天</option>
+                                        <option value="8" {$num==8?'selected':''}>8天</option>
+                                        <option value="9" {$num==9?'selected':''}>9天</option>
+                                        <option value="10" {$num==10?'selected':''}>10天</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm edituserphone" id="{$id}" type="button">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    $('.edituserphone').click(function(){
+        var id = $(this).attr('id');
+        var num = $('.num').val();
+        $.post('/admin/dating/editnum',{id:id,num:num},function(res){
+            if(res.code ==1){
+                 swal("修改成功！", "您已经修改了这条数据。", "success");
+                 setTimeout(function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    window.parent.location.reload();
+                    parent.layer.close(index);
+                },2000);
+            }
+            else{
+                swal("撤销失败", "您取消了修改操作！", "error");
+            }
+        });
+    });
+</script>
+{/block}
+
+

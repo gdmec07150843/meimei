@@ -1,0 +1,200 @@
+{extend name="header:header"/}
+{block name="content"}
+<link href="/admin/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+<style type="text/css" media="screen">
+    .form-required{
+        color:red;
+    }
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 基本信息 -->
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑{$list.title}</h5>
+                        <a href="{:url('/admin/setting/basicpic')}" class="btn btn-default btn-sm" style="float: right;">返回基础图片设置</a>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="form" class="form-horizontal m-t">
+                            <input type="hidden" name="id" value="{$list.id}" />
+                            <!--图片1-->
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="img1" id="thumbnail" value="{$list.img1|default=''}" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                                        {if condition="$list.img1 eq null"}
+                                        <img src="/static/img/default-thumbnail.png" id="thumbnail-preview" width="100" height="100" style="cursor: pointer" />
+                                        {else/}
+                                        <img src="{$list.img1}" id="thumbnail-preview" width="100" height="100" style="cursor: pointer" />
+                                        {/if}
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+                                </div>
+                            </div>
+                            <!--图片2-->
+                            {if condition="($list.id == 1) OR ($list.id == 4)"}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="img2" id="thumbnail2" value="{$list.img2|default=''}" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail2');">
+                                        {if condition="$list.img2 eq null"}
+                                        <img src="/static/img/default-thumbnail.png" id="thumbnail2-preview" width="100" height="100" style="cursor: pointer" />
+                                        {else/}
+                                        <img src="{$list.img2}" id="thumbnail2-preview" width="100" height="100" style="cursor: pointer" />
+                                        {/if}
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail2" value="取消图片">
+                                </div>
+                            </div>
+                            <!--图片3-->
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="img3" id="thumbnail3" value="{$list.img3|default=''}" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail3');">
+                                        {if condition="$list.img3 eq null"}
+                                        <img src="/static/img/default-thumbnail.png" id="thumbnail3-preview" width="100" height="100" style="cursor: pointer" />
+                                        {else/}
+                                        <img src="{$list.img3}" id="thumbnail3-preview" width="100" height="100" style="cursor: pointer" />
+                                        {/if}
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail3" value="取消图片">
+                                </div>
+                            </div>
+                            {/if}
+                            {if condition="$list.id == 4"}
+                            <!--图片4-->
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="img4" id="thumbnail4" value="{$list.img4|default=''}" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail4');">
+                                        {if condition="$list.img4 eq null"}
+                                        <img src="/static/img/default-thumbnail.png" id="thumbnail4-preview" width="100" height="100" style="cursor: pointer" />
+                                        {else/}
+                                        <img src="{$list.img4}" id="thumbnail4-preview" width="100" height="100" style="cursor: pointer" />
+                                        {/if}
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail4" value="取消图片">
+                                </div>
+                            </div>
+                            <!--图片5-->
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">图片</label>
+                                <div class="col-md-6 col-sm-10">
+                                    <input type="hidden" name="img5" id="thumbnail5" value="{$list.img5|default=''}" />
+                                    <a href="javascript:uploadOneImage('图片上传','#thumbnail5');">
+                                        {if condition="$list.img5 eq null"}
+                                        <img src="/static/img/default-thumbnail.png" id="thumbnail5-preview" width="100" height="100" style="cursor: pointer" />
+                                        {else/}
+                                        <img src="{$list.img5}" id="thumbnail5-preview" width="100" height="100" style="cursor: pointer" />
+                                        {/if}
+                                    </a>
+                                    <input type="button" class="btn btn-sm btn-cancel-thumbnail5" value="取消图片">
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary btn-sm editflash" type="button">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ajax加载动画 -->
+    <div class="spiner" style="position:fixed;top:0;left:0;z-index:2;width:100%;height:100%;display:none">
+        <div class="spiner-example" style="position:absolute;top:50%;left:50%">
+            <div class="sk-spinner sk-spinner-fading-circle">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
+    </div>
+<!--js-->
+<script type="text/javascript">
+    //全局变量
+    var GV = {
+        ROOT: "__ROOT__/",
+        WEB_ROOT: "/",
+        JS_ROOT: "admin/js/"
+    };
+</script>
+<script src="/admin/js/wind.js"></script>
+<script src="/admin/js/admin.js"></script>
+<script>
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail').val('');
+        });
+    });
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail2',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail2').val('');
+        });
+    });
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail3',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail3').val('');
+        });
+    });
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail4',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail4').val('');
+        });
+    });
+    $(function () {
+        $(document).on('click','.btn-cancel-thumbnail5',function(){
+            $(this).prev().find('img').attr('src', '/static/img/default-thumbnail.png');
+            $(this).siblings('.thumbnail5').val('');
+        });
+    });
+    $('.editflash').click(function(){
+        var form = new FormData(document.getElementById("form"));
+        $.ajax({
+            url:"/admin/setting/editpicPost",
+            type:"post",
+            data:form,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                if(data.code==1){
+                    swal({
+                        title: "修改成功",
+                        type: "success"
+                    });
+                    setTimeout(function(){
+                        window.location.href="/admin/setting/basicpic";
+                    },2000);
+                }else{
+                    swal({
+                        title: "修改失败",
+                        type: "error"
+                    });
+                }
+            }
+        });
+    });
+</script>
+{/block}
